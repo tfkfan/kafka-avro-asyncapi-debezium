@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: example-app
+  kafka:
+    client-id: ${spring.application.name}
+    bootstrap-servers:
+      - localhost:9094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8081
+    listener:
+      ack-mode: manual
+    streams:
+      application-id: ${spring.application.name}
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+        schema.registry.url: http://localhost:8081
+  datasource:
+    url: jdbc://localhost:5432/devdb
+    password: postgres
+    username: postgres
+    hikari:
+      maximum-pool-size: 5

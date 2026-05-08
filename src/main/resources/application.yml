@@ -19,8 +19,7 @@ spring:
         default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
         schema.registry.url: http://localhost:8081
   datasource:
-    url: jdbc://localhost:5432/devdb
+    url: jdbc:postgresql://localhost:5432/devdb
     password: postgres
     username: postgres
-    hikari:
-      maximum-pool-size: 5
+    driver-class-name: org.postgresql.Driver

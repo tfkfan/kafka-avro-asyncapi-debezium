@@ -23,7 +23,7 @@
         <asyncapi.generator.version>1.0.0-EAP</asyncapi.generator.version>
         <avro.serializer.version>8.1.0</avro.serializer.version>
         <spring-cloud.version>2023.0.5</spring-cloud.version>
-        <zenwave.version>2.3.0</zenwave.version>
+        <zenwave.version>2.4.0</zenwave.version>
     </properties>
 
     <repositories>
@@ -56,7 +56,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -73,6 +73,20 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+  <!--      <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -141,26 +155,47 @@
                 <artifactId>zenwave-sdk-maven-plugin</artifactId>
                 <version>${zenwave.version}</version>
                 <configuration>
-                    <inputSpec>${project.basedir}/src/main/resources/payments.yml</inputSpec>
-                    <skip>false</skip>
                     <addCompileSourceRoot>true</addCompileSourceRoot>
                     <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>generate-asyncapi</id>
+                        <id>generate-payments</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
                             <generatorName>AsyncAPIGenerator</generatorName>
+                            <inputSpec>${project.basedir}/src/main/resources/payments.yml</inputSpec>
                             <configOptions>
                                 <role>provider</role>
+                                <useSpringBoot3>true</useSpringBoot3>
                                 <templates>SpringKafka</templates>
                                 <producerApiPackage>io.tfkfan.asyncapi.events</producerApiPackage>
                                 <consumerApiPackage>io.tfkfan.asyncapi.events</consumerApiPackage>
-                                <avroCompilerProperties.imports>${project.basedir}/src/main/resources/avro</avroCompilerProperties.imports>
+                                <avroCompilerProperties.imports>${project.basedir}/src/main/resources/avro
+                                </avroCompilerProperties.imports>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-orders</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>AsyncAPIGenerator</generatorName>
+                            <inputSpec>${project.basedir}/src/main/resources/orders.yml</inputSpec>
+                            <configOptions>
+                                <role>provider</role>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <templates>SpringKafka</templates>
+                                <producerApiPackage>io.tfkfan.asyncapi.events</producerApiPackage>
+                                <consumerApiPackage>io.tfkfan.asyncapi.events</consumerApiPackage>
+                                <avroCompilerProperties.imports>${project.basedir}/src/main/resources/avro
+                                </avroCompilerProperties.imports>
                             </configOptions>
                         </configuration>
                     </execution>

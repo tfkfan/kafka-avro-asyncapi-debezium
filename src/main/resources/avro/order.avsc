@@ -1,7 +1,7 @@
 {
   "namespace": "ru.argo.avro",
   "type": "record",
-  "name": "Payment",
+  "name": "Order",
   "fields": [
     {
       "name": "transactionId",
@@ -11,18 +11,7 @@
       }
     },
     {
-      "name": "amount",
-      "type": "double"
-    },
-    {
-      "name": "from",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "to",
+      "name": "title",
       "type": {
         "type": "string",
         "logicalType": "uuid"

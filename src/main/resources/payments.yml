@@ -24,11 +24,3 @@ operations:
       $ref: '#/channels/Payments'
     messages:
       - $ref: '#/channels/Payments/messages/PaymentMessage'
-  onPaymentReceived:
-    action: receive
-    tags:
-      - name: Payments
-    channel:
-      $ref: '#/channels/Payments'
-    messages:
-      - $ref: '#/channels/Payments/messages/PaymentMessage'

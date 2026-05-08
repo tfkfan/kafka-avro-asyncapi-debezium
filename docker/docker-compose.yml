@@ -26,7 +26,7 @@ services:
       - kafka
       - schema-registry
   schema-registry:
-    image: confluentinc/cp-schema-registry:6.2.15
+    image: confluentinc/cp-schema-registry:${CP_VERSION}
     ports:
       - "8081:8081"
     environment:
@@ -36,7 +36,7 @@ services:
     depends_on:
       - kafka
   kafka:
-    image: confluentinc/cp-kafka:7.5.0
+    image: confluentinc/cp-kafka:${CP_VERSION}
     hostname: kafka
     container_name: kafka
     ports:
@@ -57,7 +57,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
   connect:
-    image: tfkfan/cp-kafka-connect:7.7.8
+    image: tfkfan/cp-kafka-connect:${CP_VERSION}
     depends_on:
       - kafka
       - schema-registry
@@ -85,3 +85,13 @@ services:
       CONNECT_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
       CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+  postgresql:
+    image: postgres:16.1
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    command: ["postgres", "-c", "wal_level=logical"]
+    ports:
+      - 127.0.0.1:5432:5432

@@ -57,8 +57,10 @@ The debezium heartbeat table is required to keep the connector active and manage
 
 - Prove that the connector is advancing: even in the absence of business events, we can distinguish a healthy connector from a blocked one.
 - Prevent WAL accumulation: by generating regular traffic, the replication slot advances, which enables the cleanup of old segments.
+
 ⚠️ Without a heartbeat, an inactive system can unnecessarily accumulate WALs and saturate disk space.
 
+⚠️ Also be careful with current logic in OutboxEventProducer: placement the create and delete queries inside the same transaction possibly can lead to events lose when connector is off or failed
 
 ## Docs and links
 

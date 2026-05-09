@@ -29,7 +29,7 @@ public class Application implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        log.info("App started");
+        log.info("App script started");
 
         final Payment p = Payment.newBuilder()
                 .setFrom(senderId)
@@ -45,5 +45,7 @@ public class Application implements CommandLineRunner {
 
         paymentsEventsProducer.onPaymentCreated(p);
         ordersEventsProducer.onOrderCreated(o);
+
+        log.info("App script completed");
     }
 }

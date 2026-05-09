@@ -1,7 +1,9 @@
-package io.tfkfan.outbox;
+package io.tfkfan.outbox.impl;
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import io.tfkfan.asyncapi.events.DefaultPaymentsEventsProducer;
+import io.tfkfan.outbox.OutboxEvent;
+import io.tfkfan.outbox.OutboxEventProducer;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,6 @@ public class PaymentsEventsProducerImpl extends DefaultPaymentsEventsProducer {
                 .<Payment>builder()
                 .id(payload.getTransactionId())
                 .topic(paymentsTopicName)
-                .eventType(OutboxEventType.CREATE)
                 .payload(payload)
                 .build());
     }

@@ -18,15 +18,16 @@ public class OutboxEventProducer<A extends SpecificRecord> {
         Objects.requireNonNull(event);
         Objects.requireNonNull(event.getId(), "id cannot be null");
         Objects.requireNonNull(event.getPayload(), "payload cannot be null");
-        Objects.requireNonNull(event.getEventType(), "eventType cannot be null");
 
         final String topic = event.getTopic() != null ? event.getTopic() : defaultTopic;
         Objects.requireNonNull(topic);
 
-        return jdbcTemplate.update("INSERT INTO %s (id, topic, event_type, payload) VALUES (?, ?, ?, ?)".formatted(tableName),
+        int r1 = jdbcTemplate.update("INSERT INTO %s (id, topic, payload) VALUES (?, ?, ?)".formatted(tableName),
                 event.getId(),
                 topic,
-                event.getEventType().name(),
-                avroSerializer.serialize(topic, event.getPayload())) > 0;
+                avroSerializer.serialize(topic, event.getPayload()));
+        int r2 = jdbcTemplate.update("DELETE FROM %s WHERE id=?".formatted(tableName),
+                event.getId());
+        return r1 > 0 && r2 > 0;
     }
 }

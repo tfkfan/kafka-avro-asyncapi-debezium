@@ -23,3 +23,9 @@ spring:
     password: postgres
     username: postgres
     driver-class-name: org.postgresql.Driver
+
+app:
+  kafka:
+    topics:
+      orders.topic: "orders-topic"
+      payments.topic: "payments-topic"

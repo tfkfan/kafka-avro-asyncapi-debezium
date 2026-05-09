@@ -1,13 +1,13 @@
-package io.tfkfan.outbox;
+package io.tfkfan.outbox.impl;
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import io.tfkfan.asyncapi.events.DefaultOrdersEventsProducer;
-import io.tfkfan.asyncapi.events.OrdersEventsProducer;
+import io.tfkfan.outbox.OutboxEvent;
+import io.tfkfan.outbox.OutboxEventProducer;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.argo.avro.Order;
-import ru.argo.avro.Payment;
 
 @Primary
 @Component
@@ -25,7 +25,6 @@ public class OrdersEventsProducerImpl extends DefaultOrdersEventsProducer {
                 .<Order>builder()
                 .id(payload.getTransactionId())
                 .topic(ordersTopicName)
-                .eventType(OutboxEventType.CREATE)
                 .payload(payload)
                 .build());
     }

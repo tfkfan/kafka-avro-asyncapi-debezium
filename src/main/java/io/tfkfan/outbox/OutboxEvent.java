@@ -11,6 +11,5 @@ import java.util.UUID;
 public class OutboxEvent<A extends SpecificRecord> {
     private UUID id;
     private String topic;
-    private OutboxEventType eventType;
     private A payload;
 }

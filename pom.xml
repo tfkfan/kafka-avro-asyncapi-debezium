@@ -20,7 +20,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
         <avro.version>1.11.1</avro.version>
-        <asyncapi.generator.version>1.0.0-EAP</asyncapi.generator.version>
         <avro.serializer.version>8.1.0</avro.serializer.version>
         <spring-cloud.version>2023.0.5</spring-cloud.version>
         <zenwave.version>2.4.0</zenwave.version>
@@ -110,11 +109,6 @@
             <artifactId>kafka-streams-avro-serde</artifactId>
             <version>${avro.serializer.version}</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.zenwave360.sdk</groupId>
-            <artifactId>zenwave-sdk-maven-plugin</artifactId>
-            <version>${zenwave.version}</version>
         </dependency>
     </dependencies>
 

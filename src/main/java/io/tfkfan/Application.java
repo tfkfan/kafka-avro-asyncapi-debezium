@@ -29,9 +29,10 @@ public class Application implements CommandLineRunner {
     public void run(String... args) {
         log.info("App script started");
 
-        final Payment p = new Payment();
-        p.setTransactionId(UUID.randomUUID().toString());
-        p.setAmount(990.00);
+        final Payment p = new Payment()
+               // .withTransactionId(UUID.randomUUID().toString())
+                .withAmount(990.00)
+                .withCreatedAt("aaaa");
 
         paymentsEventsProducer.send(OutboxEvent
                 .<Payment>builder()

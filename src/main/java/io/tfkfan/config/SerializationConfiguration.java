@@ -20,16 +20,14 @@ public class SerializationConfiguration {
     @Bean
     public KafkaJsonSchemaDeserializer<Payment> kafkaDeserializer() {
         final KafkaJsonSchemaDeserializer<Payment> deserializer = new KafkaJsonSchemaDeserializer<>();
-        deserializer.configure(Map.of("schema.registry.url", schemaRegistryUrl,
-                "auto.register.schemas", true), false);
+        deserializer.configure(Map.of("schema.registry.url", schemaRegistryUrl), false);
         return deserializer;
     }
 
     @Bean
     public KafkaJsonSchemaSerializer<Payment> kafkaSerializer() {
         final KafkaJsonSchemaSerializer<Payment> serializer = new KafkaJsonSchemaSerializer<>();
-        serializer.configure(Map.of("schema.registry.url", schemaRegistryUrl,
-                "auto.register.schemas", true), false);
+        serializer.configure(Map.of("schema.registry.url", schemaRegistryUrl), false);
         return serializer;
     }
 }

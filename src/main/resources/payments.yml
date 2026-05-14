@@ -34,6 +34,7 @@ components:
         createdAt:
           type: string
     Payment:
+      type: object
       allOf:
         - $ref: '#/components/schemas/BasePayment'
         - type: object
@@ -42,3 +43,8 @@ components:
               type: string
             amount:
               type: number
+            some:
+              type: string
+      required:
+        - createdAt
+        - transactionId

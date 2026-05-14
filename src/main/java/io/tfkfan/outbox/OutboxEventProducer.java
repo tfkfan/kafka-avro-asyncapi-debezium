@@ -11,7 +11,7 @@ public class OutboxEventProducer<A> {
     private final String tableName;
     private final String defaultTopic;
     private final JdbcTemplate jdbcTemplate;
-    private final KafkaJsonSchemaSerializer<A> avroSerializer;
+    private final KafkaJsonSchemaSerializer<A> serializer;
 
     public boolean send(OutboxEvent<A> event) {
         Objects.requireNonNull(event);
@@ -24,9 +24,8 @@ public class OutboxEventProducer<A> {
         int r1 = jdbcTemplate.update("INSERT INTO %s (id, topic, payload) VALUES (?, ?, ?)".formatted(tableName),
                 event.getId(),
                 topic,
-                avroSerializer.serialize(topic, event.getPayload()));
-        int r2 = jdbcTemplate.update("DELETE FROM %s WHERE id=?".formatted(tableName),
-                event.getId());
-        return r1 > 0 && r2 > 0;
+                serializer.serialize(topic, event.getPayload()));
+
+        return r1 > 0;
     }
 }

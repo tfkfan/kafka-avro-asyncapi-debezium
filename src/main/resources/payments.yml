@@ -7,13 +7,10 @@ info:
     - name: "Payments"
 
 channels:
-  Payments:
-    address: "payments-topic"
+  payments:
     messages:
       PaymentMessage:
-        payload:
-          schemaFormat: "application/vnd.apache.avro;version=1.9.0"
-          $ref: './avro/payment.avsc'
+        $ref: '#/components/messages/PaymentMessage'
 
 operations:
   onPaymentCreated:
@@ -21,6 +18,27 @@ operations:
     tags:
       - name: Payments
     channel:
-      $ref: '#/channels/Payments'
+      $ref: '#/channels/payments'
     messages:
-      - $ref: '#/channels/Payments/messages/PaymentMessage'
+      - $ref: '#/channels/payments/messages/PaymentMessage'
+
+components:
+  messages:
+    PaymentMessage:
+      payload:
+        $ref: '#/components/schemas/Payment'
+  schemas:
+    BasePayment:
+      type: object
+      properties:
+        createdAt:
+          type: string
+    Payment:
+      allOf:
+        - $ref: '#/components/schemas/BasePayment'
+        - type: object
+          properties:
+            transactionId:
+              type: string
+            amount:
+              type: number

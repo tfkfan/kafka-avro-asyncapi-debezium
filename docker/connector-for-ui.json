@@ -17,7 +17,7 @@
   "key.converter": "org.apache.kafka.connect.storage.StringConverter",
   "key.converter.schemas.enable": "false",
   "value.converter": "io.debezium.converters.BinaryDataConverter",
-  "value.converter.delegate.converter.type": "io.confluent.connect.avro.AvroConverter",
+  "value.converter.delegate.converter.type": "io.confluent.connect.json.JsonSchemaConverter",
   "value.converter.delegate.converter.type.schema.registry.url": "http://schema-registry:8081",
   "transforms": "outbox",
   "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",

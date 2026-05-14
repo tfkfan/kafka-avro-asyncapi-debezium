@@ -19,8 +19,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
-        <avro.version>1.11.1</avro.version>
-        <avro.serializer.version>8.1.0</avro.serializer.version>
         <spring-cloud.version>2023.0.5</spring-cloud.version>
         <zenwave.version>2.4.0</zenwave.version>
     </properties>
@@ -92,23 +90,15 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
         <!-- misc -->
         <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>${avro.version}</version>
-        </dependency>
-        <dependency>
             <groupId>io.confluent</groupId>
-            <artifactId>kafka-avro-serializer</artifactId>
-            <version>${avro.serializer.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.confluent</groupId>
-            <artifactId>kafka-streams-avro-serde</artifactId>
-            <version>${avro.serializer.version}</version>
-            <scope>compile</scope>
+            <artifactId>kafka-json-schema-serializer</artifactId>
+            <version>7.8.0</version>
         </dependency>
     </dependencies>
 
@@ -160,36 +150,11 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <generatorName>AsyncAPIGenerator</generatorName>
+                            <generatorName>jsonschema2pojo</generatorName>
                             <inputSpec>${project.basedir}/src/main/resources/payments.yml</inputSpec>
                             <configOptions>
-                                <role>provider</role>
-                                <useSpringBoot3>true</useSpringBoot3>
-                                <templates>SpringKafka</templates>
-                                <producerApiPackage>io.tfkfan.asyncapi.events</producerApiPackage>
-                                <consumerApiPackage>io.tfkfan.asyncapi.events</consumerApiPackage>
-                                <avroCompilerProperties.imports>${project.basedir}/src/main/resources/avro
-                                </avroCompilerProperties.imports>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-orders</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <generatorName>AsyncAPIGenerator</generatorName>
-                            <inputSpec>${project.basedir}/src/main/resources/orders.yml</inputSpec>
-                            <configOptions>
-                                <role>provider</role>
-                                <useSpringBoot3>true</useSpringBoot3>
-                                <templates>SpringKafka</templates>
-                                <producerApiPackage>io.tfkfan.asyncapi.events</producerApiPackage>
-                                <consumerApiPackage>io.tfkfan.asyncapi.events</consumerApiPackage>
-                                <avroCompilerProperties.imports>${project.basedir}/src/main/resources/avro
-                                </avroCompilerProperties.imports>
+                                <modelPackage>io.tfkfan.asyncapi.events</modelPackage>
+                                <jsonschema2pojo.includeTypeInfo>true</jsonschema2pojo.includeTypeInfo>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -201,19 +166,9 @@
                         <version>${zenwave.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>org.apache.avro</groupId>
-                        <artifactId>avro-compiler</artifactId>
-                        <version>${avro.version}</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>com.fasterxml.jackson.core</groupId>
-                                <artifactId>jackson-core</artifactId>
-                            </exclusion>
-                            <exclusion>
-                                <groupId>com.fasterxml.jackson.core</groupId>
-                                <artifactId>jackson-databind</artifactId>
-                            </exclusion>
-                        </exclusions>
+                        <groupId>io.zenwave360.sdk.plugins</groupId>
+                        <artifactId>asyncapi-jsonschema2pojo</artifactId>
+                        <version>${zenwave.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>

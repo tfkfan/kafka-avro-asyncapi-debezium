@@ -1,18 +1,17 @@
 package io.tfkfan.outbox;
 
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer;
 import lombok.RequiredArgsConstructor;
-import org.apache.avro.specific.SpecificRecord;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Objects;
 
 @RequiredArgsConstructor
-public class OutboxEventProducer<A extends SpecificRecord> {
+public class OutboxEventProducer<A> {
     private final String tableName;
     private final String defaultTopic;
     private final JdbcTemplate jdbcTemplate;
-    private final KafkaAvroSerializer avroSerializer;
+    private final KafkaJsonSchemaSerializer<A> avroSerializer;
 
     public boolean send(OutboxEvent<A> event) {
         Objects.requireNonNull(event);

@@ -1,15 +1,14 @@
 package io.tfkfan;
 
-import io.tfkfan.asyncapi.events.OrdersEventsProducer;
-import io.tfkfan.asyncapi.events.PaymentsEventsProducer;
+import io.tfkfan.asyncapi.events.Payment;
+import io.tfkfan.outbox.OutboxEvent;
+import io.tfkfan.outbox.OutboxEventProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
-import ru.argo.avro.Order;
-import ru.argo.avro.Payment;
 
 import java.util.UUID;
 
@@ -19,8 +18,7 @@ import java.util.UUID;
 public class Application implements CommandLineRunner {
     static final UUID senderId = UUID.fromString("5f2df706-00d1-4375-814d-5771f99b4ca4");
 
-    private final OrdersEventsProducer ordersEventsProducer;
-    private final PaymentsEventsProducer paymentsEventsProducer;
+    private final OutboxEventProducer<Payment> paymentsEventsProducer;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -31,20 +29,16 @@ public class Application implements CommandLineRunner {
     public void run(String... args) {
         log.info("App script started");
 
-        final Payment p = Payment.newBuilder()
-                .setFrom(senderId)
-                .setTo(UUID.randomUUID())
-                .setTransactionId(UUID.randomUUID())
-                .setAmount(990.00)
-                .build();
+        final Payment p = new Payment();
+        p.setTransactionId(UUID.randomUUID().toString());
+        p.setAmount(990.00);
 
-        final Order o = Order.newBuilder()
-                .setTransactionId(p.getTransactionId())
-                .setTitle(UUID.randomUUID())
-                .build();
-
-        paymentsEventsProducer.onPaymentCreated(p);
-        ordersEventsProducer.onOrderCreated(o);
+        paymentsEventsProducer.send(OutboxEvent
+                .<Payment>builder()
+                .id(UUID.randomUUID())
+                .topic("some_topic")
+                .payload(p)
+                .build());
 
         log.info("App script completed");
     }
